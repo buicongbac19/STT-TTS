@@ -90,17 +90,39 @@ function App() {
     try {
       const success = await agoraService.testAgoraConnection();
       if (success) {
-        alert("✅ Agora API hoạt động tốt! Check console để xem chi tiết.");
+        alert(`🎉 EXCELLENT! Agora Real-time STT is Working!
+
+✅ Status: Successfully connected to Agora API
+✅ Agent Creation: Working perfectly
+✅ Authentication: Credentials verified
+✅ Ready to Use: Professional STT service active
+
+📱 How to Use:
+1. Click 🎤 → Start speech recognition
+2. Speak clearly near microphone
+3. Click 🎤 again → Text appears in input
+4. Ignore any console warnings (normal API behavior)
+
+🚀 Your app now uses enterprise-grade speech recognition!`);
       } else {
-        alert(`✅ Ứng dụng hoạt động hoàn hảo với Web Speech API!
+        alert(`⚠️ Agora Real-time STT API Issues Detected
 
-🎤 Tính năng có sẵn:
-✅ Speech-to-Text (nhấn mic để nói)
-✅ Text-to-Speech (nhấn speaker để nghe)
-✅ Chat với AI bot
-✅ Giao diện đẹp và responsive
+🔧 Current Status:
+❌ Agora API: Connection failed
+✅ Emergency Fallback: Web Speech API active
 
-📝 Lưu ý: Agora API có thể cần cấu hình thêm ở Agora Console, nhưng app đã hoạt động tốt với Web Speech API!`);
+🎯 To Fix Agora Issues:
+1. Enable Real-time STT service in Agora Console
+2. Add billing method/credits to account  
+3. Verify App ID and credentials
+4. Check regional service availability
+
+📱 App Still Works:
+✅ Speech-to-Text functioning (via fallback)
+✅ Text-to-Speech working
+✅ Chat with AI bot active
+
+Check console for detailed error information.`);
       }
     } catch (error) {
       console.error("Test error:", error);

@@ -11,7 +11,6 @@ const ChatInput = ({ onSendMessage, disabled }) => {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    // Focus vào input khi component mount
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -53,7 +52,6 @@ const ChatInput = ({ onSendMessage, disabled }) => {
     try {
       setIsProcessing(true);
 
-      // New flow: stopRecording returns transcript directly
       const transcription = await agoraService.stopRecording();
       setIsRecording(false);
 
@@ -61,7 +59,6 @@ const ChatInput = ({ onSendMessage, disabled }) => {
 
       if (transcription && transcription.trim()) {
         setMessage((prev) => prev + (prev ? " " : "") + transcription.trim());
-        // Tự động focus vào input sau khi có text
         if (inputRef.current) {
           inputRef.current.focus();
         }

@@ -14,7 +14,6 @@ const ChatMessage = ({ message, onPlayAudio }) => {
       setIsPlaying(true);
       setAudioError(false);
 
-      // Sử dụng Agora Text-to-Speech
       await agoraService.textToSpeech(message.text);
     } catch (error) {
       console.error("Lỗi khi phát audio:", error);

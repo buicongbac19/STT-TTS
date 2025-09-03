@@ -5,7 +5,6 @@ const fetch = require("node-fetch");
 const app = express();
 const PORT = 3001;
 
-// Agora Configuration
 const AGORA_CONFIG = {
   customerId: "91a46b7174cf44d1962db0947f9d7968",
   customerSecret: "e5fbde57fb2a4e08ba2fbf8858a10f81",
@@ -13,17 +12,14 @@ const AGORA_CONFIG = {
   baseUrl: "https://api.agora.io",
 };
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Generate auth token
 function generateAuthToken() {
   const credentials = `${AGORA_CONFIG.customerId}:${AGORA_CONFIG.customerSecret}`;
   return Buffer.from(credentials).toString("base64");
 }
 
-// Start STT Session
 app.post("/api/agora/start-stt", async (req, res) => {
   try {
     console.log("🔄 Starting Agora STT session...");
@@ -38,7 +34,7 @@ app.post("/api/agora/start-stt", async (req, res) => {
       rtcConfig: {
         channelName: "speech-to-text-channel",
         pubBotUid: "888001",
-        subBotUid: "888002", // Required by API schema despite examples not showing it
+        subBotUid: "888002",
       },
       captionConfig: {
         sliceDuration: 60,
@@ -78,7 +74,6 @@ app.post("/api/agora/start-stt", async (req, res) => {
     const result = JSON.parse(responseText);
     console.log("✅ STT Session started successfully");
 
-    // Extract agentId from response
     const agentId = result.agentId || result.agent_id || result.id;
     console.log("📋 Agent ID:", agentId);
 
@@ -92,25 +87,22 @@ app.post("/api/agora/start-stt", async (req, res) => {
   }
 });
 
-// Stop STT Session
 app.post("/api/agora/stop-stt", async (req, res) => {
   try {
     const { agentId } = req.body;
     console.log("🛑 Stopping STT agent:", agentId);
 
     const authToken = generateAuthToken();
-    // Sử dụng /agents/:agentId/leave endpoint theo Agora docs
     const url = `${AGORA_CONFIG.baseUrl}/api/speech-to-text/v1/projects/${AGORA_CONFIG.appId}/agents/${agentId}/leave`;
 
     console.log("📤 Stop URL:", url);
 
     const response = await fetch(url, {
-      method: "POST", // Note: POST, not DELETE theo examples
+      method: "POST",
       headers: {
         Authorization: `Basic ${authToken}`,
         "Content-Type": "application/json",
       },
-      // Note: Không cần body theo examples
     });
 
     const responseText = await response.text();
@@ -134,12 +126,10 @@ app.post("/api/agora/stop-stt", async (req, res) => {
   }
 });
 
-// Health check
 app.get("/health", (req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
 });
 
-// Test STT configuration
 app.get("/test-config", (req, res) => {
   const authToken = generateAuthToken();
   res.json({
@@ -153,7 +143,7 @@ app.get("/test-config", (req, res) => {
       rtcConfig: {
         channelName: "speech-to-text-channel",
         pubBotUid: "888001",
-        subBotUid: "888002", // Required by API schema
+        subBotUid: "888002",
       },
       captionConfig: {
         sliceDuration: 60,
@@ -176,7 +166,7 @@ app.listen(PORT, () => {
   console.log("");
   console.log("Available endpoints:");
   console.log("  POST   /api/agora/start-stt");
-  console.log("  DELETE /api/agora/stop-stt");
+  console.log("  POST   /api/agora/stop-stt");
   console.log("  GET    /health");
   console.log("  GET    /test-config");
 });
